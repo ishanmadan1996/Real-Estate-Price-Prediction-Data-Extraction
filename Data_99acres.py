@@ -39,7 +39,7 @@ for span in ab:
             driver.get(url_extension+i['href'])
             pg = driver.page_source
             soup = BeautifulSoup(pg, 'html.parser')
-            div_soup = BeautifulSoup(soup,'lxml')
+
             area = soup.find('span',{'id':'builtupArea_span'})
             if area is None:
                 area = '-'
@@ -57,9 +57,21 @@ for span in ab:
             else:
                 carpetarea = carpetarea.text
             bedroom = soup.find('span', {'id': 'bedRoomNum'})
+            if bedroom is None:
+                bedroom = ''
+            else:
+                bedroom = bedroom.text
             bathroom = soup.find('span', {'id': 'bathroomNum'})
+            if bathroom is None:
+                bathroom = ''
+            else:
+                bathroom = bathroom.text
             balcony = soup.find('span', {'id': 'balconyNum'})
-            configuration = bathroom.text + bedroom.text + balcony.text
+            if balcony is None:
+                balcony = ''
+            else:
+                balcony = balcony.text
+            configuration = bathroom + bedroom + balcony
             if configuration is None:
                 configuration = '-'
             else:
@@ -69,17 +81,16 @@ for span in ab:
                 price = '-'
             else:
                 price = price.text
-            price_per_sq_feet = soup.find('div',{'class':'pdFactVal'})
+            price_per_sq_feet = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[1]/div[3]""")
             if price_per_sq_feet is None:
                 price_per_sq_feet = '-'
             else:
-                 for team in div_soup.findAll('div', 'pdFactVal'):
-                    price_per_sq_feet = team.text
-            age = soup.find('div',{'id':'agePossessionLbl'})
+                 price_per_sq_feet = price_per_sq_feet.text
+            age = driver.find_element_by_xpath("""//*[@id="agePossessionLbl"]""")
             if age is None:
                 age = '-'
             else:
-                age = age.encode('utf-8')
+                age = age.text
 
             print superbuiltuparea
             print carpetarea

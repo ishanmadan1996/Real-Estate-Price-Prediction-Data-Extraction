@@ -32,9 +32,9 @@ page = driver.page_source
 soup = BeautifulSoup(page,'html.parser')
 ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain a tags
 
-for span in ab:
-
-        links = span.find_all('a')
+for span in ab: #go through all links found on the page
+    try:
+        links = span.find_all('a') #extract the required links only
         for i in links:
             driver.get(url_extension+i['href'])
             pg = driver.page_source
@@ -86,28 +86,41 @@ for span in ab:
                 price_per_sq_feet = '-'
             else:
                  price_per_sq_feet = price_per_sq_feet.text
+                 price_per_sq_feet = re.sub('View Price Details','',price_per_sq_feet)
+                 price_per_sq_feet = re.sub('@','',price_per_sq_feet)
             age = driver.find_element_by_xpath("""//*[@id="agePossessionLbl"]""")
             if age is None:
                 age = '-'
             else:
                 age = age.text
 
+            floorno = soup.find('span', {'id': 'floorNumLabel'})
+            if floorno is None:
+                floorno = '-'
+            else:
+                floorno = floorno.text
+
             print superbuiltuparea
             print carpetarea
             with open('C:\Users\Ishant\Desktop\\'+'Santacruz(West).csv','a') as f:
                 writer = csv.writer(f)
-                rows = zip([superbuiltuparea],['|'], [area], ['|'],[carpetarea], ['|'], [configuration], ['|'], [price],['|'],[price_per_sq_feet],['|'],[age],['|'],['Santacruz(West)'], '\n')
+                rows = zip([superbuiltuparea],['|'], [area], ['|'],[carpetarea], ['|'], [configuration], ['|'], [price],['|'],[price_per_sq_feet],['|'],[age],['|'],[floorno],['|'],['Santacruz(West)'] ,'\n')
                 for row in rows:
                     print row
                     writer.writerow(row)
                     f.close
+    except Exception as e:
+        with open('C:\Users\Ishant\Desktop\\' + 'log_Santacruz(West).csv', 'a') as f1:
+                 f1.write(str(url_extension+i['href'])+'\n')
+                 f1.close()
 
 
 
 
-# page_links = soup.find('div',{'class':'jpag'})
-# # for i in page_links:
-# #     print i
+
+page_links = soup.find('div',{'class':'//*[@id="results"]/div/div[34]'})
+for i in page_links:
+    print i
 # urls_page = ['https://www.justdial.com/Mumbai/Exporters-Engineer-in-Kalpana-Cinema-Kurla-West/nct-10195860/page-'+
 #              str(i) for i in range(2, 3)] #pagenation links
 # for span in ab:

@@ -48,7 +48,7 @@ for span in ab:
             with open('C:\Users\Ishant\Desktop\\' + 'Santacruz(West).csv', 'a') as f:
                 # f.write(list_info+'\n')
                 writer = csv.writer(f)
-                rows = zip([area], ['|'], [configuration], ['|'], [price],['|'],[price_per_sq_feet],['|'],[age],['|'],['Santacruz(West)'], '\n')
+                rows = zip([''+area.text], ['|'], [''+configuration], ['|'], [''+price.text],['|'],[price_per_sq_feet.text],['|'],[age.text],['|'],['Santacruz(West)'], '\n')
                 for row in rows:
                     print row
                     writer.writerow(row)

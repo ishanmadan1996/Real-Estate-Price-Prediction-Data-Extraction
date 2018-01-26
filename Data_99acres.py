@@ -3,10 +3,12 @@ import re
 from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
+import  lxml
 
 chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
 driver = webdriver.Chrome(chrome)
-driver.get("https://www.99acres.com/search/property/buy/residential-all/mumbai-all?search_type=QS&search_location=NRI&lstAcn=NR_R&lstAcnId=-1&src=CLUSTER&preference=S&selected_tab=1&city=12&res_com=R&property_type=R&isvoicesearch=N&keyword_suggest=mumbai%20(all)%3B&fullSelectedSuggestions=mumbai%20(all)&strEntityMap=W3sidHlwZSI6ImNpdHkifSx7IjEiOlsibXVtYmFpIChhbGwpIiwiQ0lUWV8xMiwgUFJFRkVSRU5DRV9TLCBSRVNDT01fUiJdfV0%3D&texttypedtillsuggestion=Mumba&refine_results=Y&Refine_Localities=Refine%20Localities&action=%2Fdo%2Fquicksearch%2Fsearch&suggestion=CITY_12%2C%20PREFERENCE_S%2C%20RESCOM_R&searchform=1&price_min=null&price_max=null")
+driver.get("https://www.99acres.com/search/property/buy/residential-all/santacruz-west-mumbai-south-west?search_type=QS&search_location=SH&lstAcn=SEARCH&lstAcnId=456325754502255&src=CLUSTER&preference=S&city=17&res_com=R&property_type=R&selected_tab=1&isvoicesearch=N&keyword_suggest=santacruz%20(west)%2C%20mumbai%20south%20west%3B&fullSelectedSuggestions=santacruz%20(west)%2C%20mumbai%20south%20west&strEntityMap=W3sidHlwZSI6ImxvY2FsaXR5In0seyIxIjpbInNhbnRhY3J1eiAod2VzdCksIG11bWJhaSBzb3V0aCB3ZXN0IiwiQ0lUWV8xNywgTE9DQUxJVFlfNDk0NCwgUFJFRkVSRU5DRV9TLCBSRVNDT01fUiJdfV0%3D&texttypedtillsuggestion=santacr&refine_results=Y&Refine_Localities=Refine%20Localities&action=%2Fdo%2Fquicksearch%2Fsearch&suggestion=CITY_17%2C%20LOCALITY_4944%2C%20PREFERENCE_S%2C%20RESCOM_R&searchform=1&locality=4944&price_min=null&price_max=null")
+
 url_extension = 'https://www.99acres.com/'
 
 try:
@@ -31,32 +33,64 @@ soup = BeautifulSoup(page,'html.parser')
 ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain a tags
 
 for span in ab:
-    try:
+
         links = span.find_all('a')
         for i in links:
             driver.get(url_extension+i['href'])
             pg = driver.page_source
             soup = BeautifulSoup(pg, 'html.parser')
+            div_soup = BeautifulSoup(soup,'lxml')
             area = soup.find('span',{'id':'builtupArea_span'})
-            print area.text
+            if area is None:
+                area = '-'
+            else:
+                area = area.text
+            superbuiltuparea = soup.find('span', {'id': 'superbuiltupArea_span'})
+            if superbuiltuparea is None:
+                superbuiltuparea = '-'
+            else:
+                superbuiltuparea = superbuiltuparea.text
 
-            configuration = soup.find('div',{'class':'noEllipsis pdFactVal configDetails'})
+            carpetarea = soup.find('span', {'id': 'carpetArea_span'})
+            if carpetarea is None:
+                carpetarea = '-'
+            else:
+                carpetarea = carpetarea.text
+            bedroom = soup.find('span', {'id': 'bedRoomNum'})
+            bathroom = soup.find('span', {'id': 'bathroomNum'})
+            balcony = soup.find('span', {'id': 'balconyNum'})
+            configuration = bathroom.text + bedroom.text + balcony.text
+            if configuration is None:
+                configuration = '-'
+            else:
+                configuration = configuration
             price = soup.find('span',{'class':'pdPropValue'})
+            if price is None:
+                price = '-'
+            else:
+                price = price.text
             price_per_sq_feet = soup.find('div',{'class':'pdFactVal'})
+            if price_per_sq_feet is None:
+                price_per_sq_feet = '-'
+            else:
+                 for team in div_soup.findAll('div', 'pdFactVal'):
+                    price_per_sq_feet = team.text
             age = soup.find('div',{'id':'agePossessionLbl'})
+            if age is None:
+                age = '-'
+            else:
+                age = age.encode('utf-8')
 
-            with open('C:\Users\Ishant\Desktop\\' + 'Santacruz(West).csv', 'a') as f:
-                # f.write(list_info+'\n')
+            print superbuiltuparea
+            print carpetarea
+            with open('C:\Users\Ishant\Desktop\\'+'Santacruz(West).csv','a') as f:
                 writer = csv.writer(f)
-                rows = zip([''+area.text], ['|'], [''+configuration], ['|'], [''+price.text],['|'],[price_per_sq_feet.text],['|'],[age.text],['|'],['Santacruz(West)'], '\n')
+                rows = zip([superbuiltuparea],['|'], [area], ['|'],[carpetarea], ['|'], [configuration], ['|'], [price],['|'],[price_per_sq_feet],['|'],[age],['|'],['Santacruz(West)'], '\n')
                 for row in rows:
                     print row
                     writer.writerow(row)
                     f.close
-    except Exception as e:
-            with open('C:\Users\Ishant\Desktop\\' + 'log_Exporters_Mumbai4.csv', 'a') as f1:
-                f1.write(url_extension+str(i) + '\n')
-                f1.close()
+
 
 
 

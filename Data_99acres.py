@@ -10,7 +10,7 @@ url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-bandra-west-mumbai-south-west-ffid-page-'+
              str(i) for i in range(1, 14)] #pagenation links
 
-with open('C:\Users\Ishant\Desktop\\' + 'Khar(East).csv', 'a') as f:
+with open('C:\Users\Ishant\Desktop\\' + 'Bandra(West).csv', 'a') as f:
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
@@ -18,7 +18,7 @@ with open('C:\Users\Ishant\Desktop\\' + 'Khar(East).csv', 'a') as f:
         print row
         writer.writerow(row)
         f.close
-for x in range(1,14):
+for x in urls_page:
     driver.get(x)
     try:
         while True:

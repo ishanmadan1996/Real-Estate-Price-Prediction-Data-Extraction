@@ -3,215 +3,155 @@ import re
 from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
-import  lxml
 
 chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
 driver = webdriver.Chrome(chrome)
-driver.get("https://www.99acres.com/search/property/buy/residential-all/santacruz-west-mumbai-south-west?search_type=QS&search_location=SH&lstAcn=SEARCH&lstAcnId=456325754502255&src=CLUSTER&preference=S&city=17&res_com=R&property_type=R&selected_tab=1&isvoicesearch=N&keyword_suggest=santacruz%20(west)%2C%20mumbai%20south%20west%3B&fullSelectedSuggestions=santacruz%20(west)%2C%20mumbai%20south%20west&strEntityMap=W3sidHlwZSI6ImxvY2FsaXR5In0seyIxIjpbInNhbnRhY3J1eiAod2VzdCksIG11bWJhaSBzb3V0aCB3ZXN0IiwiQ0lUWV8xNywgTE9DQUxJVFlfNDk0NCwgUFJFRkVSRU5DRV9TLCBSRVNDT01fUiJdfV0%3D&texttypedtillsuggestion=santacr&refine_results=Y&Refine_Localities=Refine%20Localities&action=%2Fdo%2Fquicksearch%2Fsearch&suggestion=CITY_17%2C%20LOCALITY_4944%2C%20PREFERENCE_S%2C%20RESCOM_R&searchform=1&locality=4944&price_min=null&price_max=null")
-
 url_extension = 'https://www.99acres.com/'
+urls_page = ['https://www.99acres.com/property-in-bandra-west-mumbai-south-west-ffid-page-'+
+             str(i) for i in range(1, 14)] #pagenation links
 
-try:
-    while True:
-        last_height = driver.execute_script("return document.body.scrollHeight")
-        # Scroll down to bottom
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-        # Wait to load page
-        time.sleep(1.5)
-
-        # Calculate new scroll height and compare with last scroll height
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            break
-        last_height = new_height
-except:
-    print ''
-
-page = driver.page_source
-soup = BeautifulSoup(page,'html.parser')
-ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain a tags
-
-for span in ab: #go through all links found on the page
+with open('C:\Users\Ishant\Desktop\\' + 'Khar(East).csv', 'a') as f:
+    writer = csv.writer(f)
+    rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
+               ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
+    for row in rows:
+        print row
+        writer.writerow(row)
+        f.close
+for x in range(1,14):
+    driver.get(x)
     try:
-        links = span.find_all('a') #extract the required links only
-        for i in links:
-            driver.get(url_extension+i['href'])
-            pg = driver.page_source
-            soup = BeautifulSoup(pg, 'html.parser')
+        while True:
+            last_height = driver.execute_script("return document.body.scrollHeight")
+            # Scroll down to bottom
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            area = soup.find('span',{'id':'builtupArea_span'})
-            if area is None:
-                area = '-'
-            else:
-                area = area.text
-            superbuiltuparea = soup.find('span', {'id': 'superbuiltupArea_span'})
-            if superbuiltuparea is None:
-                superbuiltuparea = '-'
-            else:
-                superbuiltuparea = superbuiltuparea.text
+            # Wait to load page
+            time.sleep(1.5)
 
-            carpetarea = soup.find('span', {'id': 'carpetArea_span'})
-            if carpetarea is None:
-                carpetarea = '-'
-            else:
-                carpetarea = carpetarea.text
-            bedroom = soup.find('span', {'id': 'bedRoomNum'})
-            if bedroom is None:
-                bedroom = ''
-            else:
-                bedroom = bedroom.text
-            bathroom = soup.find('span', {'id': 'bathroomNum'})
-            if bathroom is None:
-                bathroom = ''
-            else:
-                bathroom = bathroom.text
-            balcony = soup.find('span', {'id': 'balconyNum'})
-            if balcony is None:
-                balcony = ''
-            else:
-                balcony = balcony.text
-            configuration = bathroom + bedroom + balcony
-            if configuration is None:
-                configuration = '-'
-            else:
-                configuration = configuration
-            price = soup.find('span',{'class':'pdPropValue'})
-            if price is None:
-                price = '-'
-            else:
-                price = price.text
-            price_per_sq_feet = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[1]/div[3]""")
-            if price_per_sq_feet is None:
-                price_per_sq_feet = '-'
-            else:
-                 price_per_sq_feet = price_per_sq_feet.text
-                 price_per_sq_feet = re.sub('View Price Details','',price_per_sq_feet)
-                 price_per_sq_feet = re.sub('@','',price_per_sq_feet)
-            age = driver.find_element_by_xpath("""//*[@id="agePossessionLbl"]""")
-            if age is None:
-                age = '-'
-            else:
-                age = age.text
+            # Calculate new scroll height and compare with last scroll height
+            new_height = driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break
+            last_height = new_height
+    except:
+        print ''
 
-            floorno = soup.find('span', {'id': 'floorNumLabel'})
-            if floorno is None:
-                floorno = '-'
-            else:
-                floorno = floorno.text
+    page = driver.page_source
+    soup = BeautifulSoup(page,'html.parser')
+    ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain a tags
 
-            print superbuiltuparea
-            print carpetarea
-            with open('C:\Users\Ishant\Desktop\\'+'Santacruz(West).csv','a') as f:
-                writer = csv.writer(f)
-                rows = zip([superbuiltuparea],['|'], [area], ['|'],[carpetarea], ['|'], [configuration], ['|'], [price],['|'],[price_per_sq_feet],['|'],[age],['|'],[floorno],['|'],['Santacruz(West)'] ,'\n')
-                for row in rows:
-                    print row
-                    writer.writerow(row)
-                    f.close
-    except Exception as e:
-        with open('C:\Users\Ishant\Desktop\\' + 'log_Santacruz(West).csv', 'a') as f1:
-                 f1.write(str(url_extension+i['href'])+'\n')
-                 f1.close()
+    for span in ab: #go through all links found on the page
+        try:
+            links = span.find_all('a') #extract the required links only
+            for i in links:
+                driver.get(url_extension+i['href'])
+                pg = driver.page_source
+                soup = BeautifulSoup(pg, 'html.parser')
+
+                area = soup.find('span',{'id':'builtupArea_span'})
+                if area is None:
+                    area = '-'
+                else:
+                    area = area.text
+                superbuiltuparea = soup.find('span', {'id': 'superbuiltupArea_span'})
+                if superbuiltuparea is None:
+                    superbuiltuparea = '-'
+                else:
+                    superbuiltuparea = superbuiltuparea.text
+
+                carpetarea = soup.find('span', {'id': 'carpetArea_span'})
+                if carpetarea is None:
+                    carpetarea = '-'
+                else:
+                    carpetarea = carpetarea.text
+                bedroom = soup.find('span', {'id': 'bedRoomNum'})
+                if bedroom is None:
+                    bedroom = ''
+                else:
+                    bedroom = bedroom.text
+                bathroom = soup.find('span', {'id': 'bathroomNum'})
+                if bathroom is None:
+                    bathroom = ''
+                else:
+                    bathroom = bathroom.text
+                balcony = soup.find('span', {'id': 'balconyNum'})
+                if balcony is None:
+                    balcony = ''
+                else:
+                    balcony = balcony.text
+                configuration = bathroom + bedroom + balcony
+                if configuration is None:
+                    configuration = '-'
+                else:
+                    configuration = configuration
+                price = soup.find('span',{'class':'pdPropValue'})
+                if price is None:
+                    price = '-'
+                else:
+                    price = price.text
+                price_per_sq_feet = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[1]/div[3]""")
+                if price_per_sq_feet is None:
+                    price_per_sq_feet = '-'
+                else:
+                     price_per_sq_feet = price_per_sq_feet.text
+                     price_per_sq_feet = re.sub('View Price Details','',price_per_sq_feet)
+                     price_per_sq_feet = re.sub('@','',price_per_sq_feet)
+                age = driver.find_element_by_xpath("""//*[@id="agePossessionLbl"]""")
+                if age is None:
+                    age = '-'
+                else:
+                    age = age.text
+
+                floorno = soup.find('span', {'id': 'floorNumLabel'})
+                if floorno is None:
+                    floorno = '-'
+                else:
+                    floorno = floorno.text
+                furnishing = soup.find('span', {'id': 'furnishing'})
+                if furnishing is None:
+                    furnishing = '-'
+                else:
+                    furnishing = furnishing.text
+                parking = soup.find('span', {'id': 'reservedParking'})
+                if parking is None:
+                    parking = '-'
+                else:
+                    parking = parking.text
+                    if parking.find('Covered') :
+                        parking = re.sub('Covered','',parking)
+                    else:
+                        parking = re.sub('Open','',parking)
+                address1 = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[2]/div[2]""")
+
+                if address1 is None:
+                    address1 = '-'
+                else:
+                    address1 = address1.text
+                address2 = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[2]/div[3]""")
+                if address2 is None:
+                    address2 = ''
+                else:
+                    address2 = address2.text
+                address = address1+address2
+
+                print superbuiltuparea
+                print carpetarea
+                with open('C:\Users\Ishant\Desktop\\'+'Bandra(West).csv','a') as f:
+                    writer = csv.writer(f)
+                    rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Bandra West'],'\n')
+                    for row in rows:
+                        print row
+                        writer.writerow(row)
+                        f.close
+        except Exception as e:
+            with open('C:\Users\Ishant\Desktop\\' + 'log_Bandra(West).csv', 'a') as f1:
+                     f1.write(str(url_extension+i['href'])+'\n')
+                     f1.close()
+
+driver.close()
 
 
 
 
 
-page_links = soup.find('div',{'class':'//*[@id="results"]/div/div[34]'})
-for i in page_links:
-    print i
-# urls_page = ['https://www.justdial.com/Mumbai/Exporters-Engineer-in-Kalpana-Cinema-Kurla-West/nct-10195860/page-'+
-#              str(i) for i in range(2, 3)] #pagenation links
-# for span in ab:
-#     try:
-#         links = span.find_all('a')  # get all a tags
-#         for link in links:
-#             driver.get(link['href'])
-#             pg = driver.page_source
-#             soup = BeautifulSoup(pg, 'html.parser')
-#             ab = soup.find('span', {'class': 'telnowpr'})  # mobile no
-#             info = soup.find('span', {'class': 'adrstxtr'})  # address
-#             name = soup.find('span', {'class': 'fn'})  # name
-#             nm = name.text
-#             num = ab.text
-#             addre = info.text
-#             if (re.search(r'\(\w*\)', addre)):  # removing &
-#                 addre = re.sub(r'\(\w*\)', '', addre)
-#
-#             addre = " ".join(addre.split()) #removing all extra whitespaces
-#             print addre
-#             print num
-#             list_info = nm + '|' + num + '|' + '\t\t' + addre.rstrip('\n') + '\n'
-#             with open('C:\Users\Ishant\Desktop\\' + 'Exporters_Mumbai.csv', 'a') as f:
-#                 # f.write(list_info+'\n')
-#                 writer = csv.writer(f)
-#                 rows = zip([name.text], ['|'], [ab.text], ['|'], [addre], '\n')
-#                 for row in rows:
-#                     print row
-#                     writer.writerow(row)
-#                 f.close
-#     except Exception as e:
-#         with open('C:\Users\Ishant\Desktop\\'+'log_Exporters_Mumbai4.csv','a') as f1:
-#             f1.write(str(link)+'\n')
-#             f1.close()
-# for x in urls_page:  # select the url in href for all a tags(links)
-#     try:
-#         driver.get(x)
-#         while True:
-#             last_height = driver.execute_script("return document.body.scrollHeight")
-#             # Scroll down to bottom
-#             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-#
-#             # Wait to load page
-#             time.sleep(1.5)
-#
-#             # Calculate new scroll height and compare with last scroll height
-#             new_height = driver.execute_script("return document.body.scrollHeight")
-#             if new_height == last_height:
-#                 break
-#             last_height = new_height
-#         page = driver.page_source
-#         soup = BeautifulSoup(page, 'html.parser')
-#         ab = soup.findAll('span', {"class": "jcn"})
-#         for span in ab:
-#             try:
-#                 links = span.find_all('a')  # get all a tags
-#                 for link in links:
-#                     # link_ad = link_ad.append(str(link['href']))
-#                     driver.get(link['href'])
-#                     pg = driver.page_source
-#                     soup = BeautifulSoup(pg, 'html.parser')
-#                     ab = soup.find('span', {'class': 'telnowpr'})  # mobile no
-#                     info = soup.find('span', {'class': 'adrstxtr'})  # address
-#                     name = soup.find('span', {'class': 'fn'})  # name
-#                     nm = name.text
-#                     num = ab.text
-#                     addre = info.text
-#                     if (re.search(r'\(\w*\)', addre)):  # removing &
-#                         addre = re.sub(r'\(\w*\)', '', addre)
-#
-#                     addre = " ".join(addre.split())
-#                     print addre
-#                     print
-#                     list_info = nm + '|' + num + '|' + '\t\t' + addre.rstrip('\n') + '\n'
-#                     with open('C:\Users\Ishant\Desktop\\' + 'Exporters_Mumbai.csv', 'a') as f:
-#                         # f.write(list_info+'\n')
-#                         writer = csv.writer(f)
-#                         rows = zip([name.text], ['|'], [ab.text], ['|'], [addre], '\n')
-#                         for row in rows:
-#                             print row
-#                             writer.writerow(row)
-#                         f.close
-#             except Exception as e:
-#                 with open('C:\Users\Ishant\Desktop\\' + 'log_Exporters_Mumbai5.csv', 'a') as f1:
-#                     f1.write(str(link) + '\n')
-#                     f1.close()
-#         driver.close()
-#     except Exception as ex:
-#         with open('C:\Users\Ishant\Desktop\\' + 'log_jdial_Exporters_Mumbai5.csv', 'a') as f2:
-#             f2.write(str(link) + '\n')
-#             f2.close()
-#         continue
-#
-#

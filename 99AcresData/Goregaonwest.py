@@ -17,11 +17,12 @@ with open('/home/ubuntu/99acres/' + 'Goregaon(West).csv', 'a') as f:
         print row
         writer.writerow(row)
         f.close
+display = Display(visible=0, size=(800, 600))
+display.start()
+driver = webdriver.Chrome()
 for x in urls_page:
     try:
-        display = Display(visible=0, size=(800, 600))
-        display.start()
-        driver = webdriver.Chrome()
+
         driver.get(x)
         try:
             while True:

@@ -5,6 +5,7 @@ from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
 
+
 url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-goregaon-west-mumbai-andheri-dahisar-ffid-page-10'+
              str(i) for i in range(1, 33)] #pagenation links
@@ -19,7 +20,8 @@ with open('/home/ubuntu/99acres/' + 'Goregaon(West).csv', 'a') as f:
         f.close
 display = Display(visible=0, size=(800, 600))
 display.start()
-driver = webdriver.Chrome()
+chrome = r"/usr/share/chromedriver"
+driver = webdriver.Chrome(chrome)
 for x in urls_page:
     try:
 

@@ -20,8 +20,7 @@ with open('/home/ubuntu/99acres/' + 'Goregaon(West).csv', 'a') as f:
         f.close
 display = Display(visible=0, size=(800, 600))
 display.start()
-chrome = r"/usr/share/chromedriver"
-driver = webdriver.Chrome(chrome)
+driver = webdriver.Chrome()
 for x in urls_page:
     try:
 

@@ -7,9 +7,7 @@ import time
 from bs4 import BeautifulSoup
 
 
-display = Display(visible=0, size=(800, 800))
-display.start()
-driver = webdriver.Chrome()
+
 url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-borivali-east-mumbai-andheri-dahisar-ffid-page-'+
              str(i) for i in range(1, 27)] #pagenation links
@@ -25,7 +23,9 @@ with open('/home/ubuntu/99acres/' + 'Borivali(East).csv', 'a') as f:
 
 for x in urls_page:
     try:
-
+        display = Display(visible=0, size=(800, 600))
+        display.start()
+        driver = webdriver.Chrome()
         driver.get(x)
         try:
             while True:

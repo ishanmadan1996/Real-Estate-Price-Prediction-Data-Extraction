@@ -6,8 +6,7 @@ from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
 
-chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
-driver = webdriver.Chrome(chrome)
+
 url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-borivali-east-mumbai-andheri-dahisar-ffid-page-'+
              str(i) for i in range(1, 27)] #pagenation links

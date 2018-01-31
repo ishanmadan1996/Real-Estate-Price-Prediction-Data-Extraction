@@ -151,7 +151,7 @@ for x in urls_page:
                             print row
                             writer.writerow(row)
                             f.close
-            
+
 
 
 

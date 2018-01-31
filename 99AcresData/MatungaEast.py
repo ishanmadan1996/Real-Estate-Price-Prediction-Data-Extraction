@@ -1,19 +1,16 @@
 import csv
 import re
-
-from pyvirtualdisplay import Display
 from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
 
 chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
 driver = webdriver.Chrome(chrome)
-
 url_extension = 'https://www.99acres.com/'
-urls_page = ['https://www.99acres.com/property-in-mulund-west-central-mumbai-suburbs-ffid-page-'+
-             str(i) for i in range(1, 29)] #pagenation links
+urls_page = ['https://www.99acres.com/property-in-matunga-east-mumbai-south-ffid-page-'+
+             str(i) for i in range(1, 3)] #pagenation links
 
-with open('C:\Users\Ishant\Desktop\\'  + 'Mulund(West).csv', 'a') as f:
+with open('C:\Users\Ishant\Desktop\\' + 'Matunga(East).csv', 'a') as f:
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
@@ -21,10 +18,9 @@ with open('C:\Users\Ishant\Desktop\\'  + 'Mulund(West).csv', 'a') as f:
         print row
         writer.writerow(row)
         f.close
-
-for x in urls_page:
+for x in range(0,1):
     try:
-        driver.get(x)
+        driver.get('https://www.99acres.com/search/property/buy/residential-all/churchgate-mumbai-south?search_type=QS&search_location=SH&lstAcn=SEARCH&lstAcnId=104832859887255&src=CLUSTER&preference=S&city=16&res_com=R&property_type=R&locality_array_for_zedo=1059&selected_tab=1&isvoicesearch=N&keyword_suggest=churchgate%2C%20mumbai%20south%3B&fullSelectedSuggestions=churchgate%2C%20mumbai%20south&strEntityMap=W3sidHlwZSI6ImxvY2FsaXR5In0seyIxIjpbImNodXJjaGdhdGUsIG11bWJhaSBzb3V0aCIsIkNJVFlfMTYsIExPQ0FMSVRZXzEwNTksIFBSRUZFUkVOQ0VfUywgUkVTQ09NX1IiXX1d&refine_results=Y&Refine_Localities=Refine%20Localities&action=%2Fdo%2Fquicksearch%2Fsearch&searchform=1&locality=1059&price_min=null&price_max=null')
         try:
             while True:
                 last_height = driver.execute_script("return document.body.scrollHeight")
@@ -123,10 +119,11 @@ for x in urls_page:
                         parking = '-'
                     else:
                         parking = parking.text
-                        if parking.find('Covered') :
+                        if parking.find('Covered'):
                             parking = re.sub('Covered','',parking)
                         if parking.find('Open'):
-                            parking = re.sub('Open','',parking)
+                            parking = re.sub('Open', '', parking)
+
                     address1 = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[2]/div[2]""")
 
                     if address1 is None:
@@ -142,21 +139,26 @@ for x in urls_page:
 
                     print superbuiltuparea
                     print carpetarea
-                    with open('C:\Users\Ishant\Desktop\\' +'Mulund(West).csv','a') as f:
+                    with open('C:\Users\Ishant\Desktop\\'+'Matunga(East).csv','a') as f:
                         writer = csv.writer(f)
-                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Mulund West'],'\n')
+                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['MAtunga East'],'\n')
                         for row in rows:
                             print row
                             writer.writerow(row)
                             f.close
             except Exception as e:
-                with open('C:\Users\Ishant\Desktop\\'  + 'log_Mulund(West).csv', 'a') as f1:
+                with open('C:\Users\Ishant\Desktop\\' + 'log_Matunga(East).csv', 'a') as f1:
                          f1.write(str(url_extension+i['href'])+'\n')
                          f1.close()
     except Exception as e1:
-        with open('C:\Users\Ishant\Desktop\\'  + 'log_Mulund(West)_pagelinks.csv', 'a') as f1:
-            f1.write(str(x) + '\n')
+        with open('C:\Users\Ishant\Desktop\\' + 'log_Matunga(East)_pagelinks.csv', 'a') as f1:
+            f1.write(str(url_extension + i['href']) + '\n')
             f1.close()
 
 
 driver.close()
+
+
+
+
+

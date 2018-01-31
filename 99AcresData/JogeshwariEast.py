@@ -6,14 +6,14 @@ from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
 
+
 chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
 driver = webdriver.Chrome(chrome)
-
 url_extension = 'https://www.99acres.com/'
-urls_page = ['https://www.99acres.com/property-in-mulund-west-central-mumbai-suburbs-ffid-page-'+
-             str(i) for i in range(1, 29)] #pagenation links
+urls_page = ['https://www.99acres.com/property-in-jogeshwari-east-mumbai-andheri-dahisar-ffid-page-'+
+             str(i) for i in range(1, 10)] #pagenation links
 
-with open('C:\Users\Ishant\Desktop\\'  + 'Mulund(West).csv', 'a') as f:
+with open('C:\Users\Ishant\Desktop\\' + 'Jogeshwari(East).csv', 'a') as f:
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
@@ -142,19 +142,19 @@ for x in urls_page:
 
                     print superbuiltuparea
                     print carpetarea
-                    with open('C:\Users\Ishant\Desktop\\' +'Mulund(West).csv','a') as f:
+                    with open('C:\Users\Ishant\Desktop\\'+'Jogeshwari(East).csv','a') as f:
                         writer = csv.writer(f)
-                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Mulund West'],'\n')
+                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Jogeshwari East'],'\n')
                         for row in rows:
                             print row
                             writer.writerow(row)
                             f.close
             except Exception as e:
-                with open('C:\Users\Ishant\Desktop\\'  + 'log_Mulund(West).csv', 'a') as f1:
+                with open('C:\Users\Ishant\Desktop\\' + 'log_Jogeshwari(East).csv', 'a') as f1:
                          f1.write(str(url_extension+i['href'])+'\n')
                          f1.close()
     except Exception as e1:
-        with open('C:\Users\Ishant\Desktop\\'  + 'log_Mulund(West)_pagelinks.csv', 'a') as f1:
+        with open('C:\Users\Ishant\Desktop\\' + 'log_Jogeshwari(East)_pagelinks.csv', 'a') as f1:
             f1.write(str(x) + '\n')
             f1.close()
 

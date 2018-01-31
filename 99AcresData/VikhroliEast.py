@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 
 
 url_extension = 'https://www.99acres.com/'
-urls_page = ['https://www.99acres.com/property-in-borivali-east-mumbai-andheri-dahisar-ffid-page-'+
-             str(i) for i in range(1, 27)] #pagenation links
+urls_page = ['https://www.99acres.com/property-in-vikhroli-east-central-mumbai-suburbs-ffid-page-'+
+             str(i) for i in range(1, 8)] #pagenation links
 
-with open('/home/ubuntu/99acres/' + 'Borivali(East).csv', 'a') as f:
+with open('/home/ubuntu/99acres/' + 'Vikhroli(East).csv', 'a') as f:
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
@@ -144,19 +144,19 @@ for x in urls_page:
 
                     print superbuiltuparea
                     print carpetarea
-                    with open('/home/ubuntu/99acres/'+'Borivali(East).csv','a') as f:
+                    with open('/home/ubuntu/99acres/'+'Vikhroli(East).csv','a') as f:
                         writer = csv.writer(f)
-                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Borivali East'],'\n')
+                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Vikhroli East'],'\n')
                         for row in rows:
                             print row
                             writer.writerow(row)
                             f.close
             except Exception as e:
-                with open('/home/ubuntu/99acres/logs/' + 'log_Borivali(East).csv', 'a') as f1:
+                with open('/home/ubuntu/99acres/logs/' + 'log_Vikhroli(East).csv', 'a') as f1:
                          f1.write(str(url_extension+i['href'])+'\n')
                          f1.close()
     except Exception as e1:
-        with open('/home/ubuntu/99acres/logs/' + 'log_Borivali(East)_pagelinks.csv', 'a') as f1:
+        with open('/home/ubuntu/99acres/logs/' + 'log_Vikhroli(East)_pagelinks.csv', 'a') as f1:
             f1.write(str(x) + '\n')
             f1.close()
 

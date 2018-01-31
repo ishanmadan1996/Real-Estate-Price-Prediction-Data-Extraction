@@ -7,12 +7,13 @@ import time
 from bs4 import BeautifulSoup
 
 
-
+chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
+driver = webdriver.Chrome(chrome)
 url_extension = 'https://www.99acres.com/'
-urls_page = ['https://www.99acres.com/property-in-dadar-east-south-mumbai-ffid-page-'+
-             str(i) for i in range(1, 4)] #pagenation links
+urls_page = ['https://www.99acres.com/property-in-kandivali-east-mumbai-andheri-dahisar-ffid-page-'+
+             str(i) for i in range(1, 73)] #pagenation links
 
-with open('/home/ubuntu/99acres/' + 'Dadar(East).csv', 'a') as f:
+with open('C:\Users\Ishant\Desktop\\' + 'Kandivali(East).csv', 'a') as f:
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
@@ -23,9 +24,6 @@ with open('/home/ubuntu/99acres/' + 'Dadar(East).csv', 'a') as f:
 
 for x in urls_page:
     try:
-        display = Display(visible=0, size=(800, 600))
-        display.start()
-        driver = webdriver.Chrome()
         driver.get(x)
         try:
             while True:
@@ -127,7 +125,7 @@ for x in urls_page:
                         parking = parking.text
                         if parking.find('Covered') :
                             parking = re.sub('Covered','',parking)
-                        else:
+                        if parking.find('Open'):
                             parking = re.sub('Open','',parking)
                     address1 = driver.find_element_by_xpath("""/html/body/div[4]/div[4]/div[1]/div[2]/div/table/tbody/tr[2]/td[2]/div[2]""")
 
@@ -144,19 +142,19 @@ for x in urls_page:
 
                     print superbuiltuparea
                     print carpetarea
-                    with open('/home/ubuntu/99acres/'+'Dadar(East).csv','a') as f:
+                    with open('C:\Users\Ishant\Desktop\\'+'Kandivali(East).csv','a') as f:
                         writer = csv.writer(f)
-                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Dadar East'],'\n')
+                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Kandivali East'],'\n')
                         for row in rows:
                             print row
                             writer.writerow(row)
                             f.close
             except Exception as e:
-                with open('/home/ubuntu/99acres/logs/' + 'log_Dadar(East).csv', 'a') as f1:
+                with open('C:\Users\Ishant\Desktop\\' + 'log_Kandivali(East).csv', 'a') as f1:
                          f1.write(str(url_extension+i['href'])+'\n')
                          f1.close()
     except Exception as e1:
-        with open('/home/ubuntu/99acres/logs/' + 'log_Dadar(East)_pagelinks.csv', 'a') as f1:
+        with open('C:\Users\Ishant\Desktop\\' + 'log_Kandivali(East)_pagelinks.csv', 'a') as f1:
             f1.write(str(x) + '\n')
             f1.close()
 

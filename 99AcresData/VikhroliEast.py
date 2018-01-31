@@ -12,6 +12,9 @@ url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-vikhroli-east-central-mumbai-suburbs-ffid-page-'+
              str(i) for i in range(1, 8)] #pagenation links
 
+display = Display(visible=0, size=(800, 600))
+display.start()
+driver = webdriver.Chrome()
 with open('/home/ubuntu/99acres/' + 'Vikhroli(East).csv', 'a') as f:
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
@@ -23,9 +26,7 @@ with open('/home/ubuntu/99acres/' + 'Vikhroli(East).csv', 'a') as f:
 
 for x in urls_page:
 
-        display = Display(visible=0, size=(800, 600))
-        display.start()
-        driver = webdriver.Chrome()
+
         driver.get(x)
         try:
             while True:

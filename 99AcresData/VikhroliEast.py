@@ -22,7 +22,7 @@ with open('/home/ubuntu/99acres/' + 'Vikhroli(East).csv', 'a') as f:
         f.close
 
 for x in urls_page:
-    try:
+
         display = Display(visible=0, size=(800, 600))
         display.start()
         driver = webdriver.Chrome()
@@ -49,7 +49,7 @@ for x in urls_page:
         ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain a tags
 
         for span in ab: #go through all links found on the page
-            try:
+
                 links = span.find_all('a') #extract the required links only
                 for i in links:
                     driver.get(url_extension+i['href'])
@@ -151,14 +151,8 @@ for x in urls_page:
                             print row
                             writer.writerow(row)
                             f.close
-            except Exception as e:
-                with open('/home/ubuntu/99acres/logs/' + 'log_Vikhroli(East).csv', 'a') as f1:
-                         f1.write(str(url_extension+i['href'])+'\n')
-                         f1.close()
-    except Exception as e1:
-        with open('/home/ubuntu/99acres/logs/' + 'log_Vikhroli(East)_pagelinks.csv', 'a') as f1:
-            f1.write(str(x) + '\n')
-            f1.close()
+            
+
 
 
 driver.close()

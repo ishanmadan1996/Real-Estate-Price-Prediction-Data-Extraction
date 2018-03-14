@@ -10,7 +10,7 @@ url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-santacruz-west-mumbai-south-west-ffid-page-'+
              str(i) for i in range(1, 10)] #pagenation links
 
-with open('C:\Users\Ishant\Desktop\\' + 'Santacruz(West).csv', 'a') as f:
+with open('C:\Users\Ishant\Desktop\\' + 'Santacruz(West).csv', 'a') as f: #creating csv file to store extracted data
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], '\n')
@@ -20,9 +20,9 @@ with open('C:\Users\Ishant\Desktop\\' + 'Santacruz(West).csv', 'a') as f:
         f.close
 for x in urls_page:
     try:
-        driver.get(x)
+        driver.get(x) #connecting to the required website
         try:
-            while True:
+            while True: #used to simulate scrolling action of a webpage on selenium browser
                 last_height = driver.execute_script("return document.body.scrollHeight")
                 # Scroll down to bottom
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -40,7 +40,7 @@ for x in urls_page:
 
         page = driver.page_source
         soup = BeautifulSoup(page,'html.parser')
-        ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain a tags
+        ab = soup.findAll('div', {"class": "wrapttl"}) #get all span tags which contain 'a' tags
 
         for span in ab: #go through all links found on the page
             try:

@@ -1,10 +1,9 @@
-import xlrd
 import pandas as pd
-import numpy as np
 
-df = pd.read_csv('C:\Users\Ishant\Desktop\BE Project\Combined_99Acres_V4.csv')
-df2 = df.copy()
-row = 1
+
+df = pd.read_csv('C:\Users\Ishant\Desktop\BE Project\Combined_99Acres_V4.csv') #reading the csv file to be cleaned
+df2 = df.copy() #create a copy of csv file
+row = 1 #initialise row counter for reading each tuple of csv
 
 new_column = df['Location'] + str(1)
 # we then add the series to the dataframe, which holds our parsed CSV file
@@ -21,7 +20,7 @@ counter = 1
 for index in range(1,32794):
     try:
         str1 = str(df2.at[row, 'Configuration']).replace('No', str(0))  # replace no with zero
-        s = map(int, filter(str.isdigit, str1))  # store the numbers into var s
+        s = map(int, filter(str.isdigit, str1))  # map the numbers from str1 and save the number in var s
         for i in s: #storing the no of bathroom,bedroom,balconies into resp columns
             if counter == 1:
                 df2.at[row, 'Bathrooms'] = i
@@ -64,12 +63,8 @@ for index in range(1,32794):
         continue
 
 
-df2.to_csv('C:\Users\Ishant\Desktop\Combined_99Acres_V5.csv')
-print df2.head()
+df2.to_csv('C:\Users\Ishant\Desktop\Combined_99Acres_V5.csv') #saving the data and formatting of df2 to the specified csv
+print df2.head() #print first 5 rows and columns of df2
 
-# print df.head() #shows us the first 5 rows and headers
 
-# print df.dtypes #This will return a list with your data types in it
-# print df.shape #to know how many columns and rows are in our dataset
-# print df.describe()
 

@@ -4,8 +4,8 @@ from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
 
-chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe"
-driver = webdriver.Chrome(chrome)
+chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe" #chromedriver
+driver = webdriver.Chrome(chrome) #initialise chrome webdriver
 url_extension = 'https://www.99acres.com/'
 urls_page = ['https://www.99acres.com/property-in-santacruz-west-mumbai-south-west-ffid-page-'+
              str(i) for i in range(1, 10)] #pagenation links
@@ -141,7 +141,7 @@ for x in urls_page:
                     print carpetarea
                     with open('C:\Users\Ishant\Desktop\\'+'Santacruz(West).csv','a') as f:
                         writer = csv.writer(f)
-                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Santacruz West'],'\n')
+                        rows = zip([superbuiltuparea], [area],[carpetarea],[configuration], [price],[price_per_sq_feet],[age],[floorno],[address],[parking],[furnishing] ,['Santacruz West'],'\n') #zip takes multiple iterables and returns an iterator of tuples
                         for row in rows:
                             print row
                             writer.writerow(row)

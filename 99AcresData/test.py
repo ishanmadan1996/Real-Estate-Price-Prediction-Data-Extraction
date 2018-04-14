@@ -3,13 +3,16 @@ import re
 from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
+from pyvirtualdisplay import Display
 
-chrome = r"C:\Users\Ishant\Downloads\chromedriver.exe" #chromedriver
-driver = webdriver.Chrome(chrome) #initialise chrome webdriver
+display = Display(visible=0, size=(800, 600))
+display.start()
+
+driver = webdriver.Firefox(executable_path='/home/ishan/geckodriver')
 url_extension = 'https://www.99acres.com/'
 
 
-with open('C:\Users\Ishant\Desktop\Data_99acres\CSV\\' + 'Mumbai.csv', 'a') as f: #creating csv file to store extracted data
+with open('/home/ishan/csv/' + 'Mumbai.csv', 'a') as f: #creating csv file to store extracted data
     writer = csv.writer(f)
     rows = zip(['SuperBuiltUp Area'], ['Area'], ['Carpet Area'], ['Configuration'], ['Price'], ['Price per sq.Ft'], ['Age'],
                ['Floor Number'], ['Address'], ['Parking'], ['Furnishing'], ['Location'], ['Flooring'] ,'\n')
@@ -17,7 +20,7 @@ with open('C:\Users\Ishant\Desktop\Data_99acres\CSV\\' + 'Mumbai.csv', 'a') as f
         print row
         writer.writerow(row)
         f.close
-for i in range(1,2451):
+for i in range(100,501):
     urls_page = ['https://www.99acres.com/property-in-mumbai-ffid-page-'+
              str(i)+'?sort_by=date_d']
     for k in urls_page:
@@ -153,7 +156,7 @@ for i in range(1,2451):
 
                         print superbuiltuparea
                         print carpetarea
-                        with open('C:\Users\Ishant\Desktop\Data_99acres\CSV\\' + 'Mumbai.csv', 'a') as f:
+                        with open('/home/ishan/csv/' + 'Mumbai.csv', 'a') as f:
                             writer = csv.writer(f)
                             rows = zip([superbuiltuparea], [area], [carpetarea], [configuration], [price],
                                        [price_per_sq_feet], [age], [floorno], [address], [parking], [furnishing],
@@ -164,19 +167,19 @@ for i in range(1,2451):
                                 writer.writerow(row)
                                 f.close
                 except Exception as e:
-                    with open('C:\Users\Ishant\Desktop\Data_99acres\Logs\\' + 'log_Mumbai.csv', 'a') as f1:
+                    with open('/home/ishan/logs/' + 'log_Mumbai.csv', 'a') as f1:
                         f1.write(str(url_extension + i['href']) + '\n')
                         f1.close()
         except Exception as e1:
-            with open('C:\Users\Ishant\Desktop\Data_99acres\Logs\\' + 'log_Mumbai_pagelinks.csv', 'a') as f1:
+            with open('/home/ishan/logs/' + 'log_Mumbai_pagelinks.csv', 'a') as f1:
                 f1.write(str(url_extension + i['href']) + '\n')
                 f1.close()
 
 
 
 
-driver.close()
-
+driver.quit()
+display.stop()
 
 
 
